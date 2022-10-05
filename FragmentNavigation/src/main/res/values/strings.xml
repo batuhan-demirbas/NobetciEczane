@@ -1,0 +1,11 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="tab1Title">Tab1</string>
+    <string name="tab2Title">Tab2</string>
+    <string name="tab3Title">Tab3</string>
+    <string name="tab4Title">Tab4</string>
+    <string name="tab5Title">Tab5</string>
+</resources>

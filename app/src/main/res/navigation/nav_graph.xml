@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mapFragment">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_nearestFragment"
+            app:destination="@id/nearestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nearestFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.NearestFragment"
+        android:label="fragment_nearest"
+        tools:layout="@layout/fragment_nearest" >
+        <action
+            android:id="@+id/action_nearestFragment_to_calenderFragment"
+            app:destination="@id/calenderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.CalenderFragment"
+        android:label="fragment_calender"
+        tools:layout="@layout/fragment_calender" >
+        <action
+            android:id="@+id/action_calenderFragment_to_bookmarkFragment"
+            app:destination="@id/bookmarkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.BookmarkFragment"
+        android:label="fragment_bookmark"
+        tools:layout="@layout/fragment_bookmark" />
+</navigation>

@@ -1,0 +1,45 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.NöbetçiEczane" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorOnPrimary">@color/red_200</item>
+        <item name="colorPrimaryContainer">@color/red_700</item>
+        <item name="colorOnPrimaryContainer">@color/red_700</item>
+
+        <!-- Secondary brand color. -->
+
+        <item name="colorOnSecondaryContainer">@color/red_700</item>
+        <item name="color">@color/red_700</item>
+
+
+
+        <item name="colorSurface">@color/red_200</item>
+        <item name="colorOnSurface">@color/red_700</item>
+        <item name="colorOnSurfaceVariant">@color/red_500</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/black</item>
+    </style>
+
+    <style name="Theme.TopBar" parent="Theme.NöbetçiEczane">
+        <!-- Transparent system bars for edge-to-edge. -->
+        <item name="colorSurface">@color/red_200</item>
+        <item name="colorOnSurfaceVariant">@color/red_500</item>
+    </style>
+
+    <style name="Theme.FAB" parent="Theme.NöbetçiEczane">
+        <!-- Transparent system bars for edge-to-edge. -->
+        <item name="colorPrimaryContainer">@color/red_700</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+    </style>
+
+    <style name="Theme.BottomBar" parent="Theme.NöbetçiEczane">
+        <!-- Transparent system bars for edge-to-edge. -->
+        c
+        <item name="colorPrimary">@color/red_200</item>
+        <item name="colorSurface">@color/red_200</item>
+        <item name="colorOnSurfaceVariant">@color/red_500</item>
+        <item name="colorOnSecondaryContainer">@color/red_700</item>
+    </style>
+
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/empty_fragment"
+app:startDestination="@id/emptyFragment2">
+
+<fragment
+    android:id="@+id/tab1fragment"
+    android:name="com.ace1ofspades.fragmentnavigation.base.Tab1Fragment"
+    android:label="@string/tab1Title" />
+
+<fragment
+    android:id="@+id/tab2fragment"
+    android:name="com.ace1ofspades.fragmentnavigation.base.Tab2Fragment"
+    android:label="@string/tab2Title" />
+
+<fragment
+    android:id="@+id/tab3fragment"
+    android:name="com.ace1ofspades.fragmentnavigation.base.Tab3Fragment"
+    android:label="@string/tab3Title" />
+
+<fragment
+    android:id="@+id/tab4fragment"
+    android:name="com.ace1ofspades.fragmentnavigation.base.Tab4Fragment"
+    android:label="@string/tab4Title" />
+
+<fragment
+    android:id="@+id/tab5fragment"
+    android:name="com.ace1ofspades.fragmentnavigation.base.Tab5Fragment"
+    android:label="@string/tab5Title" />
+<fragment
+    android:id="@+id/emptyFragment2"
+    android:name="com.ace1ofspades.fragmentnavigation.empty.EmptyFragment"
+    android:label="fragment_empty" />
+</navigation>
