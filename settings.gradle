@@ -16,3 +16,4 @@ rootProject.name = "Nöbetçi Eczane"
 include ':app'
 include ':FragmentNavigation'
 include ':AlertDialog'
+include ':RecyclerView'

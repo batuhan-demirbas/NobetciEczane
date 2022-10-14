@@ -4,33 +4,35 @@ import com.google.gson.annotations.SerializedName
 
 class Pharmacy:java.io.Serializable {
     @SerializedName("EczaneAdi")
-    val pharmacyName: String? = null
+    val name: String? = null
 
     @SerializedName("Adresi")
-    val pharmacyAddress: String? = null
+    val address: String? = null
 
     @SerializedName("Semt")
-    val pharmacyDistrict: String? = null
+    val district: String? = null
 
     @SerializedName("YolTarifi")
-    val pharmacyDirection: String? = null
+    val direction: String? = null
 
     @SerializedName("Telefon")
-    val pharmacyPhone: String? = null
+    val phone: String? = null
 
     @SerializedName("Telefon2")
-    val pharmacyPhone2: String? = null
+    val phone2: String? = null
 
     @SerializedName("Sehir")
-    val pharmacyCity: String? = null
+    val city: String? = null
 
     @SerializedName("ilce")
-    val pharmacyCounty: String? = null
+    val county: String? = null
 
     @SerializedName("latitude")
-    val pharmacyLatitude: Double? = null
+    val latitude: Double? = null
 
     @SerializedName("longitude")
-    val pharmacyLongitude: Double? = null
+    val longitude: Double? = null
+
+    var distance: Double? = null
 
 }

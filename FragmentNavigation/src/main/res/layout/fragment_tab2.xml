@@ -7,7 +7,6 @@
     android:background="#FFFFFF"
     tools:context=".base.Tab2Fragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <fragment
         android:id="@+id/tab2fragment"

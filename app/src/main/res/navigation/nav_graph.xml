@@ -7,34 +7,44 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.batuhandemirbas.nobetcieczane.MapFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.map.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_bookmarkFragment"
+            app:destination="@id/bookmarkFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_calenderFragment"
+            app:destination="@id/calenderFragment" />
         <action
             android:id="@+id/action_mapFragment_to_nearestFragment"
             app:destination="@id/nearestFragment" />
     </fragment>
     <fragment
         android:id="@+id/nearestFragment"
-        android:name="com.batuhandemirbas.nobetcieczane.NearestFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.nearest.NearestFragment"
         android:label="fragment_nearest"
         tools:layout="@layout/fragment_nearest" >
-        <action
-            android:id="@+id/action_nearestFragment_to_calenderFragment"
-            app:destination="@id/calenderFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/calenderFragment"
-        android:name="com.batuhandemirbas.nobetcieczane.CalenderFragment"
-        android:label="fragment_calender"
-        tools:layout="@layout/fragment_calender" >
-        <action
-            android:id="@+id/action_calenderFragment_to_bookmarkFragment"
-            app:destination="@id/bookmarkFragment" />
+        <argument
+            android:name="city"
+            app:argType="string" />
+        <argument
+            android:name="county"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/bookmarkFragment"
         android:name="com.batuhandemirbas.nobetcieczane.BookmarkFragment"
         android:label="fragment_bookmark"
         tools:layout="@layout/fragment_bookmark" />
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.calender.CalenderFragment"
+        android:label="fragment_calender"
+        tools:layout="@layout/fragment_calender" />
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.filter.FilterFragment"
+        android:label="fragment_filter"
+        tools:layout="@layout/fragment_filter" />
 </navigation>

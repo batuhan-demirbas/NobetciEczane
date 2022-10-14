@@ -25,7 +25,7 @@ class BookmarkFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
-        // TODO: Use the ViewModel
+
     }
 
 }
