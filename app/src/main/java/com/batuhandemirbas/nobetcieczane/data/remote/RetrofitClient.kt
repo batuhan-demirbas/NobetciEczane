@@ -1,6 +1,7 @@
 package com.batuhandemirbas.nobetcieczane.data.remote
 
 import android.content.Context
+import com.batuhandemirbas.nobetcieczane.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -13,8 +14,9 @@ object RetrofitClient {
 
     //public static final String BASE_URL = Constants.BaseUrl;
     private var BASE_URL = "https://www.nosyapi.com"
+    private val PHARMACY_APIKEY = BuildConfig.PHARMACY_APIKEY
 
-    fun retrofitInterface(context: Context?): PharmacyService {
+    fun retrofitInterface(): PharmacyService {
         return getApiClient().create(PharmacyService::class.java)
     }
 
@@ -26,7 +28,7 @@ object RetrofitClient {
                     .header("Accept-Language", "tr")
                     .addHeader(
                         "Access-Key",
-                        "I5mgwVxH9RN3aRcYmvDjNwBdiO53z4XRtzGKA5QQfg1wctSAStfpYDjAu50e" ?: ""
+                        PHARMACY_APIKEY
                     ).build()
                 chain.proceed(request)
             }.build()

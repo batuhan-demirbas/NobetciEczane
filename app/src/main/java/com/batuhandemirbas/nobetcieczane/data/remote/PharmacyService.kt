@@ -2,6 +2,7 @@ package com.batuhandemirbas.nobetcieczane.data.remote
 
 import com.batuhandemirbas.nobetcieczane.domain.model.Base
 import com.batuhandemirbas.nobetcieczane.domain.model.City
+import com.batuhandemirbas.nobetcieczane.domain.model.County
 import com.batuhandemirbas.nobetcieczane.domain.model.Pharmacy
 import retrofit2.Call
 import retrofit2.http.GET
@@ -17,4 +18,8 @@ interface PharmacyService {
 
     @GET("/apiv2/pharmacy/city?")
     fun getCities(@Query("apikey") apikey: String): Call<Base<Array<City>>>
+
+    @GET("/apiv2/pharmacy/city/?")
+    fun getCounty(@Query("apikey") apikey: String, @Query("city") city: String): Call<Base<Array<County>>>
+
 }

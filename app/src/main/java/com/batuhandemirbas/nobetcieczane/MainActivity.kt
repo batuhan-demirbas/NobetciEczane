@@ -2,23 +2,18 @@ package com.batuhandemirbas.nobetcieczane
 
 import android.Manifest
 import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.DialogFragment
 import com.ace1ofspades.fragmentnavigation.BaseFragmentActivityBinding
+import com.batuhandemirbas.nobetcieczane.ui.filter.FilterFragment
 import com.batuhandemirbas.MainViewHolder
 import com.batuhandemirbas.nobetcieczane.databinding.ActivityMainBinding
 import com.batuhandemirbas.nobetcieczane.domain.model.Base
@@ -32,136 +27,12 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.gms.tasks.Task
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-
-class FilterDialogFragment : DialogFragment() {
-
-    private val pharmacyApiKey = BuildConfig.PHARMACY_APIKEY
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout to use as dialog or embedded fragment
-        return inflater.inflate(R.layout.dialog_filter, container, false)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // The only reason you might override this method when using onCreateView() is
-        // to modify any dialog characteristics. For example, the dialog includes a
-        // title by default, but your custom layout might not need it. So here you can
-        // remove the dialog title, but you must call the superclass to get the Dialog.
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return dialog
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        println("DialogFragment onViewCreated")
-
-        val cityMenu = view.findViewById<MaterialAutoCompleteTextView>(R.id.sss)
-        val cities = mutableListOf<String>()
-        Constants.city.list?.forEach { cities.add(it.name!!) }
-
-        val adapter = ArrayAdapter(requireContext(), R.layout.item_cities, cities)
-
-        cityMenu.onItemClickListener = object : AdapterView.OnItemClickListener {
-            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Snackbar.make(view, "${cities[p2]}", Snackbar.LENGTH_SHORT).show()
-
-
-            }
-
-        }
-
-        (cityMenu as? AutoCompleteTextView)?.setAdapter(adapter)
-
-
-        mainActivity = context as? MainActivity
-        view.findViewById<Button>(R.id.buttonApply).setOnClickListener {
-            Constants.user.city = view.findViewById<EditText>(R.id.textFieldCity).text.toString()
-            Constants.user.county = view.findViewById<EditText>(R.id.textFieldCounty).text.toString()
-            Snackbar.make(view, "asdasd", Snackbar.LENGTH_SHORT).show()
-            getPharmacyData(Constants.user.city!!, Constants.user.county!!)
-            parentFragmentManager.popBackStack()
-
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        println("DialogFragment onResume")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        println("DialogFragment onDestroy")
-    }
-
-    var mainActivity: MainActivity? = null
-
-    private fun getPharmacyData(city: String, county: String) {
-
-        val call = RetrofitClient.retrofitInterface(context).getPharmacy(pharmacyApiKey,city, county)
-
-        call.enqueue(object : Callback<Base<List<Pharmacy>>> {
-            override fun onResponse(
-                call: Call<Base<List<Pharmacy>>>,
-                response: Response<Base<List<Pharmacy>>>
-            ) {
-
-                if (response.code() == 200) {
-                    val pharmacyList = response.body()
-
-                    pharmacyList?.data?.let { it ->
-
-                        Constants.pharmacy.list = it
-                        mainActivity?.configureFilter()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<Base<List<Pharmacy>>>, t: Throwable) {
-                println("-----------BEGIN---------")
-                println(" ")
-                println("URL      ->" + call.request().url())
-                println("METHOD   ->" + call.request().method())
-                println("HEADER   ->" + call.request().headers())
-                if (call.request().body() != null) {
-                    println("REQUEST  ->" + bodyToString(call.request().body()!!))
-                } else {
-                    println("REQUEST  -> null")
-                }
-                println(" ")
-                println("------------END----------")
-                println("error")
-                println(t.message)
-            }
-
-        })
-    }
-
-    private fun bodyToString(request: RequestBody): String {
-        return try {
-            val buffer = Buffer()
-            request.writeTo(buffer)
-            buffer.readUtf8()
-        } catch (e: IOException) {
-            "did not work"
-        }
-    }
-
-}
 
 class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
@@ -357,7 +228,7 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
     private fun showDialogFilter() {
         val fragmentManager = supportFragmentManager
-        val newFragment = FilterDialogFragment()
+        val newFragment = FilterFragment()
 
         val isLargeLayout = resources.getBoolean(R.bool.large_layout)
 
@@ -383,7 +254,7 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
     private fun getPharmacyData(latitude: Double, longitude: Double) {
 
-        val call = RetrofitClient.retrofitInterface(this).getNearestPharmacy(pharmacyApiKey,latitude, longitude)
+        val call = RetrofitClient.retrofitInterface().getNearestPharmacy(pharmacyApiKey,latitude, longitude)
 
         call.enqueue(object : Callback<Base<List<Pharmacy>>> {
             override fun onResponse(
@@ -425,7 +296,7 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
     private fun getCityData() {
 
-        val call = RetrofitClient.retrofitInterface(this).getCities(pharmacyApiKey)
+        val call = RetrofitClient.retrofitInterface().getCities(pharmacyApiKey)
 
         call.enqueue(object : Callback<Base<Array<City>>> {
             override fun onResponse(

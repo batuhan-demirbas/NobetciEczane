@@ -71,5 +71,7 @@ dependencies {
 
     implementation project(':FragmentNavigation')
     implementation project(':AlertDialog')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+
 
 }
