@@ -158,7 +158,7 @@ class LocationUpdates() {
             }
     }
 
-    fun goMaps (context: Context, latitude: Double, longitude: Double, address: String) {
+    fun goMaps(context: Context, latitude: Double, longitude: Double, address: String) {
         // Create a Uri from an intent string. Use the result to create an Intent.
         val gmmIntentUri = Uri.parse("geo:${latitude},${longitude}?q=${address}")
 

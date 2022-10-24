@@ -1,22 +1,22 @@
 package com.batuhandemirbas.nobetcieczane.ui.nearest.adapter
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import androidx.core.content.ContextCompat
+import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.batuhandemirbas.nobetcieczane.LocationUpdates
 import com.batuhandemirbas.nobetcieczane.R
-import com.batuhandemirbas.nobetcieczane.model.Pharmacy
-import com.batuhandemirbas.nobetcieczane.utils.Constants
-import com.yandex.mapkit.geometry.Point
-import org.w3c.dom.Text
+import com.batuhandemirbas.nobetcieczane.domain.model.City
+import com.batuhandemirbas.nobetcieczane.domain.model.Pharmacy
+import com.batuhandemirbas.nobetcieczane.util.Constants
 
 class NearestAdapter(private val dataSet: List<Pharmacy>) :
     RecyclerView.Adapter<NearestAdapter.ViewHolder>() {
@@ -69,13 +69,18 @@ class NearestAdapter(private val dataSet: List<Pharmacy>) :
                 distance.visibility = View.GONE
             } else {
                 distance.text = String.format("%.2f km uzaklıkta", pharmacy.distance)
-                    // .toDouble()"${}m uzaklıkta"
+                // .toDouble()"${}m uzaklıkta"
             }
 
             phone.text = pharmacy.phone?.replace("-", " ")?.replace("(", " (")?.replace(")", ") ")
 
             distances.setOnClickListener {
-               LocationUpdates().goMaps(it.context,pharmacy.latitude!!, pharmacy.longitude!!, pharmacy.name!!)
+                LocationUpdates().goMaps(
+                    it.context,
+                    pharmacy.latitude!!,
+                    pharmacy.longitude!!,
+                    pharmacy.name!!
+                )
             }
 
             call.setOnClickListener {
@@ -92,3 +97,50 @@ class NearestAdapter(private val dataSet: List<Pharmacy>) :
     override fun getItemCount() = dataSet.size
 
 }
+
+class CityAdapter(val context: Context, val cities: Array<City>) : BaseAdapter(),
+    ThemedSpinnerAdapter, Filterable {
+    override fun getCount(): Int {
+        return cities.size
+    }
+
+    override fun getItem(p0: Int): Any {
+        return cities[p0]
+    }
+
+    override fun getItemId(p0: Int): Long {
+        return p0.toLong()
+    }
+
+    @SuppressLint("ViewHolder")
+    override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
+        val view = LayoutInflater.from(context).inflate(R.layout.item_cities, p2)
+        return view
+    }
+
+    override fun setDropDownViewTheme(p0: Resources.Theme?) {
+
+    }
+
+    override fun getDropDownViewTheme(): Resources.Theme? {
+        return null
+    }
+
+    override fun getFilter(): Filter {
+
+        return object : Filter() {
+            override fun performFiltering(p0: CharSequence?): FilterResults {
+                TODO("Not yet implemented")
+            }
+
+            override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+    }
+
+}
+
+
+

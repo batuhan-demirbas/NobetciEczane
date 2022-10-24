@@ -7,22 +7,25 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import com.ace1ofspades.fragmentnavigation.BaseFragmentActivityBinding
+import com.batuhandemirbas.MainViewHolder
 import com.batuhandemirbas.nobetcieczane.databinding.ActivityMainBinding
-import com.batuhandemirbas.nobetcieczane.model.Base
-import com.batuhandemirbas.nobetcieczane.model.Pharmacy
-import com.batuhandemirbas.nobetcieczane.network.RetrofitClient
-import com.batuhandemirbas.nobetcieczane.utils.Constants
+import com.batuhandemirbas.nobetcieczane.domain.model.Base
+import com.batuhandemirbas.nobetcieczane.domain.model.City
+import com.batuhandemirbas.nobetcieczane.domain.model.Pharmacy
+import com.batuhandemirbas.nobetcieczane.data.remote.RetrofitClient
+import com.batuhandemirbas.nobetcieczane.util.Constants
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationToken
@@ -30,6 +33,7 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Call
@@ -38,6 +42,8 @@ import retrofit2.Response
 import java.io.IOException
 
 class FilterDialogFragment : DialogFragment() {
+
+    private val pharmacyApiKey = BuildConfig.PHARMACY_APIKEY
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +67,25 @@ class FilterDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         println("DialogFragment onViewCreated")
+
+        val cityMenu = view.findViewById<MaterialAutoCompleteTextView>(R.id.sss)
+        val cities = mutableListOf<String>()
+        Constants.city.list?.forEach { cities.add(it.name!!) }
+
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_cities, cities)
+
+        cityMenu.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Snackbar.make(view, "${cities[p2]}", Snackbar.LENGTH_SHORT).show()
+
+
+            }
+
+        }
+
+        (cityMenu as? AutoCompleteTextView)?.setAdapter(adapter)
+
+
         mainActivity = context as? MainActivity
         view.findViewById<Button>(R.id.buttonApply).setOnClickListener {
             Constants.user.city = view.findViewById<EditText>(R.id.textFieldCity).text.toString()
@@ -68,7 +93,6 @@ class FilterDialogFragment : DialogFragment() {
             Snackbar.make(view, "asdasd", Snackbar.LENGTH_SHORT).show()
             getPharmacyData(Constants.user.city!!, Constants.user.county!!)
             parentFragmentManager.popBackStack()
-
 
         }
     }
@@ -83,10 +107,12 @@ class FilterDialogFragment : DialogFragment() {
         super.onDestroyView()
         println("DialogFragment onDestroy")
     }
-    var mainActivity:MainActivity? = null
+
+    var mainActivity: MainActivity? = null
+
     private fun getPharmacyData(city: String, county: String) {
 
-        val call = RetrofitClient.retrofitInterface(context).getPharmacyData(city, county)
+        val call = RetrofitClient.retrofitInterface(context).getPharmacy(pharmacyApiKey,city, county)
 
         call.enqueue(object : Callback<Base<List<Pharmacy>>> {
             override fun onResponse(
@@ -137,8 +163,11 @@ class FilterDialogFragment : DialogFragment() {
 
 }
 
-
 class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
+
+    val viewModel: MainViewHolder by viewModels()
+
+    private val pharmacyApiKey = BuildConfig.PHARMACY_APIKEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,6 +176,17 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
         println("MAINACTIVITY onCreate")
 
+        /*
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    // Update UI elements
+                }
+            }
+        }
+         */
+
+        getCityData()
 
         locationPermissionRequest()
 
@@ -200,7 +240,6 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
 
         binding.progressBar.visibility = View.GONE
-        binding.whiteBackgorund.visibility = View.GONE
         navView = binding.bottomNavigation
         tab1.fragment.startDestination = R.id.mapFragment
         tab1.fragment.graphId = R.navigation.nav_graph
@@ -344,7 +383,7 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
     private fun getPharmacyData(latitude: Double, longitude: Double) {
 
-        val call = RetrofitClient.retrofitInterface(this).getPharmacyData(latitude, longitude)
+        val call = RetrofitClient.retrofitInterface(this).getNearestPharmacy(pharmacyApiKey,latitude, longitude)
 
         call.enqueue(object : Callback<Base<List<Pharmacy>>> {
             override fun onResponse(
@@ -365,6 +404,46 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
             }
 
             override fun onFailure(call: Call<Base<List<Pharmacy>>>, t: Throwable) {
+                println("-----------BEGIN---------")
+                println(" ")
+                println("URL      ->" + call.request().url())
+                println("METHOD   ->" + call.request().method())
+                println("HEADER   ->" + call.request().headers())
+                if (call.request().body() != null) {
+                    println("REQUEST  ->" + bodyToString(call.request().body()!!))
+                } else {
+                    println("REQUEST  -> null")
+                }
+                println(" ")
+                println("------------END----------")
+                println("error")
+                println(t.message)
+            }
+
+        })
+    }
+
+    private fun getCityData() {
+
+        val call = RetrofitClient.retrofitInterface(this).getCities(pharmacyApiKey)
+
+        call.enqueue(object : Callback<Base<Array<City>>> {
+            override fun onResponse(
+                call: Call<Base<Array<City>>>,
+                response: Response<Base<Array<City>>>
+            ) {
+
+                if (response.code() == 200) {
+                    val pharmacyList = response.body()
+
+                    pharmacyList?.data?.let {
+
+                        Constants.city.list = it
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Base<Array<City>>>, t: Throwable) {
                 println("-----------BEGIN---------")
                 println(" ")
                 println("URL      ->" + call.request().url())
@@ -429,7 +508,6 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
         Constants.pharmacy.list ?: return
 
         binding.progressBar.visibility = View.GONE
-        binding.whiteBackgorund.visibility = View.GONE
         navView = binding.bottomNavigation
         tab1.fragment.startDestination = R.id.mapFragment
         tab1.fragment.graphId = R.navigation.nav_graph

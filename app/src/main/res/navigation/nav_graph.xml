@@ -20,6 +20,7 @@
             android:id="@+id/action_mapFragment_to_nearestFragment"
             app:destination="@id/nearestFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/nearestFragment"
         android:name="com.batuhandemirbas.nobetcieczane.ui.nearest.NearestFragment"
@@ -32,19 +33,16 @@
             android:name="county"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/bookmarkFragment"
-        android:name="com.batuhandemirbas.nobetcieczane.BookmarkFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.BookmarkFragment"
         android:label="fragment_bookmark"
         tools:layout="@layout/fragment_bookmark" />
     <fragment
         android:id="@+id/calenderFragment"
-        android:name="com.batuhandemirbas.nobetcieczane.ui.calender.CalenderFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.CalenderFragment"
         android:label="fragment_calender"
         tools:layout="@layout/fragment_calender" />
-    <fragment
-        android:id="@+id/filterFragment"
-        android:name="com.batuhandemirbas.nobetcieczane.ui.filter.FilterFragment"
-        android:label="fragment_filter"
-        tools:layout="@layout/fragment_filter" />
+
 </navigation>

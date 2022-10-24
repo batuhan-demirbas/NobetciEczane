@@ -1,4 +1,4 @@
-package com.batuhandemirbas.nobetcieczane.network
+package com.batuhandemirbas.nobetcieczane.data.remote
 
 import android.content.Context
 import okhttp3.Interceptor
@@ -14,8 +14,8 @@ object RetrofitClient {
     //public static final String BASE_URL = Constants.BaseUrl;
     private var BASE_URL = "https://www.nosyapi.com"
 
-    fun retrofitInterface(context: Context?): RetrofitInterface{
-        return getApiClient().create(RetrofitInterface::class.java)
+    fun retrofitInterface(context: Context?): PharmacyService {
+        return getApiClient().create(PharmacyService::class.java)
     }
 
     fun getApiClient(): Retrofit {

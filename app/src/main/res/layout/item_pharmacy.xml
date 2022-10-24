@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/listLessonLayout"
@@ -16,100 +16,93 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="16dp" >
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:text="Eda Eczanesi"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        />
-
-                    <TextView
-                        android:id="@+id/distance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-
-                        android:fontFamily="sans-serif-black"
-                        android:text="2582m uzaklıkta"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/red_700"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/address"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="İhsaniye Mah. Tuna Cad. Ortamkent Sitesi No: 167/C 16130 Nilüfer/Bursa"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary"
-                    />
-
-                <TextView
-                    android:id="@+id/phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text="0 (224) 245 37 70"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="#5C565F"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_weight="1"
+                    android:text="Eda Eczanesi"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+
+                    android:fontFamily="sans-serif-black"
+                    android:text="2582m uzaklıkta"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/red_700"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="İhsaniye Mah. Tuna Cad. Ortamkent Sitesi No: 167/C 16130 Nilüfer/Bursa"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary" />
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="0 (224) 245 37 70"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#5C565F"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/directionsButton"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
+                    android:text="Yol Tarifi Al"
+                    android:theme="@style/Theme.Button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/phone" />
 
-                    <Button
-                        style="@style/Widget.Material3.Button.ElevatedButton"
-                        android:id="@+id/directionsButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Yol Tarifi Al"
-                        app:layout_constraintTop_toBottomOf="@id/phone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        />
-
-                    <Button
-                        style="@style/Widget.Material3.Button.ElevatedButton"
-                        android:id="@+id/callButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="Ara"
-
-                        app:layout_constraintStart_toEndOf="@id/directionsButton"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        />
-
-                </LinearLayout>
+                <Button
+                    android:id="@+id/callButton"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Ara"
+                    android:theme="@style/Theme.Button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/directionsButton" />
 
             </LinearLayout>
 
@@ -117,4 +110,4 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+</FrameLayout>

@@ -6,10 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.batuhandemirbas.nobetcieczane.LocationUpdates
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.batuhandemirbas.nobetcieczane.BuildConfig
 import com.batuhandemirbas.nobetcieczane.R
 import com.batuhandemirbas.nobetcieczane.databinding.FragmentMapBinding
-import com.batuhandemirbas.nobetcieczane.utils.Constants
+import com.batuhandemirbas.nobetcieczane.util.Constants
 import com.google.android.material.snackbar.Snackbar
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -18,20 +22,31 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
+import kotlinx.coroutines.launch
 
 class MapFragment : Fragment() {
 
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
 
-    private val mapkitApiKey = "942efc88-0b2b-40d9-b5cd-edb08f1eabe5"
+    val viewModel: MapViewModel by viewModels()
+
+    private val mapApiKey = BuildConfig.MAP_APIKEY
     private var mapView: MapView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MapKitFactory.setApiKey(mapkitApiKey)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    // Update UI elements
+                }
+            }
+        }
+
+        MapKitFactory.setApiKey(mapApiKey)
         MapKitFactory.initialize(context)
 
     }
@@ -50,12 +65,11 @@ class MapFragment : Fragment() {
 
         println("MAP OnViewCreated")
 
-        val userLocation = Constants.user
+        val user = viewModel.user
 
-        mapView = view.findViewById(R.id.mapview) as MapView
+        mapView = binding.mapview
 
-
-        if (userLocation.Lat == null) {
+        if (user.Lat == null) {
 
             val randomPharmacy = Constants.pharmacy.list?.get(0)
 
@@ -67,20 +81,17 @@ class MapFragment : Fragment() {
                 null
             )
 
-
-
         } else {
 
-            val lat = userLocation.Lat
-            val lon = userLocation.Lon
+            val lat = user.Lat
+            val lon = user.Lon
 
-            val currentLocation = Point(lat?:0.0, lon?:0.0)
 
             val mapObjects = mapView!!.map.mapObjects.addCollection()
             mapObjects.addPlacemark(Point(lat?:0.0, lon?:0.0))
 
             mapView!!.map.move(
-                CameraPosition(currentLocation, 14.0f, 0.0f, 0.0f),
+                CameraPosition(viewModel.currentLocation, 14.0f, 0.0f, 0.0f),
                 Animation(Animation.Type.SMOOTH, 2F),
                 null
             )
@@ -88,7 +99,7 @@ class MapFragment : Fragment() {
             binding.fab.setOnClickListener {
 
                 mapView!!.map.move(
-                    CameraPosition(currentLocation, 14.0f, 0.0f, 0.0f),
+                    CameraPosition(viewModel.currentLocation, 14.0f, 0.0f, 0.0f),
                     Animation(Animation.Type.SMOOTH, 2F),
                     null
                 )
@@ -109,6 +120,7 @@ class MapFragment : Fragment() {
         println("MAP onResume")
 
         mapView = binding.mapview
+
         val pharmacyList = Constants.pharmacy.list
 
         if (pharmacyList != null) {

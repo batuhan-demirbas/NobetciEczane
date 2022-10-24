@@ -1,19 +1,18 @@
-package com.batuhandemirbas.nobetcieczane
+package com.batuhandemirbas.nobetcieczane.ui
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.batuhandemirbas.nobetcieczane.R
 
 class BookmarkFragment : Fragment() {
 
     companion object {
         fun newInstance() = BookmarkFragment()
     }
-
-    private lateinit var viewModel: BookmarkViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,7 +23,6 @@ class BookmarkFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
 
     }
 

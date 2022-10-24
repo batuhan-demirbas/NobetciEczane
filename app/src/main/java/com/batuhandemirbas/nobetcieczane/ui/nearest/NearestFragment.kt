@@ -5,24 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.batuhandemirbas.nobetcieczane.LocationUpdates
 import com.batuhandemirbas.nobetcieczane.databinding.FragmentNearestBinding
-import com.batuhandemirbas.nobetcieczane.model.Base
-import com.batuhandemirbas.nobetcieczane.model.Pharmacy
-import com.batuhandemirbas.nobetcieczane.network.RetrofitClient
 import com.batuhandemirbas.nobetcieczane.ui.nearest.adapter.NearestAdapter
-import com.batuhandemirbas.nobetcieczane.utils.Constants
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
+import com.batuhandemirbas.nobetcieczane.util.Constants
 import okhttp3.RequestBody
 import okio.Buffer
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
 
 class NearestFragment : Fragment() {

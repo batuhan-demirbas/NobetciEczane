@@ -1,6 +1,7 @@
-package com.batuhandemirbas.nobetcieczane.utils
+package com.batuhandemirbas.nobetcieczane.util
 
-import com.batuhandemirbas.nobetcieczane.model.Pharmacy
+import com.batuhandemirbas.nobetcieczane.domain.model.City
+import com.batuhandemirbas.nobetcieczane.domain.model.Pharmacy
 
 object Constants {
     object user {
@@ -12,6 +13,10 @@ object Constants {
 
     object pharmacy {
         var list: List<Pharmacy>? = null
+    }
+
+    object city {
+        var list: Array<City>? = null
     }
 
 }
