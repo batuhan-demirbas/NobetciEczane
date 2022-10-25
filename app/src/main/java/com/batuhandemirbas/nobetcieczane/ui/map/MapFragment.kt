@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.batuhandemirbas.nobetcieczane.BuildConfig
-import com.batuhandemirbas.nobetcieczane.R
 import com.batuhandemirbas.nobetcieczane.databinding.FragmentMapBinding
 import com.batuhandemirbas.nobetcieczane.util.Constants
 import com.google.android.material.snackbar.Snackbar
@@ -33,7 +32,6 @@ class MapFragment : Fragment() {
 
     private val mapApiKey = BuildConfig.MAP_APIKEY
     private var mapView: MapView? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +86,7 @@ class MapFragment : Fragment() {
 
 
             val mapObjects = mapView!!.map.mapObjects.addCollection()
-            mapObjects.addPlacemark(Point(lat?:0.0, lon?:0.0))
+            mapObjects.addPlacemark(Point(lat ?: 0.0, lon ?: 0.0))
 
             mapView!!.map.move(
                 CameraPosition(viewModel.currentLocation, 14.0f, 0.0f, 0.0f),
@@ -133,15 +131,18 @@ class MapFragment : Fragment() {
                     )
                 )
 
-                val icon = ImageProvider.fromResource(context, R.drawable.pin_filled)
-                with(mark) {
+                val icon = ImageProvider.fromResource(
+                    context,
+                    com.yandex.maps.mobile.R.drawable.yandex_logo_en
+                )
+                mark.setIcon(icon)
 
-                    setIcon(icon)
+                mark.addTapListener { mapObject, point ->
+                    Snackbar.make(requireView(), "${point.latitude}", Snackbar.LENGTH_SHORT).show()
+
+                    false
                 }
 
-                mapView!!.map.mapObjects.addTapListener { mapObject, point ->
-                    true
-                }
 
             }
         }

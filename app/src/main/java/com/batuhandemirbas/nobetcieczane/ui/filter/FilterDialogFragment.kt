@@ -10,9 +10,12 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.room.Room
 import com.batuhandemirbas.nobetcieczane.BuildConfig
 import com.batuhandemirbas.nobetcieczane.MainActivity
 import com.batuhandemirbas.nobetcieczane.R
+import com.batuhandemirbas.nobetcieczane.data.local.AppDatabase
+import com.batuhandemirbas.nobetcieczane.data.local.CityDao
 import com.batuhandemirbas.nobetcieczane.data.remote.RetrofitClient
 import com.batuhandemirbas.nobetcieczane.domain.model.Base
 import com.batuhandemirbas.nobetcieczane.domain.model.Pharmacy
@@ -63,6 +66,12 @@ class FilterFragment : DialogFragment() {
         val cityItems = viewModel.getCity()
         cityMenu?.setSimpleItems(cityItems)
 
+        val db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "database-name"
+        ).build()
+
+        val cityDao = db.cityDao()
 
         cityMenu.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {

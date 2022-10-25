@@ -12,9 +12,12 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.room.Room
 import com.ace1ofspades.fragmentnavigation.BaseFragmentActivityBinding
 import com.batuhandemirbas.nobetcieczane.ui.filter.FilterFragment
 import com.batuhandemirbas.MainViewHolder
+import com.batuhandemirbas.nobetcieczane.data.local.AppDatabase
+import com.batuhandemirbas.nobetcieczane.data.local.CityEntity
 import com.batuhandemirbas.nobetcieczane.databinding.ActivityMainBinding
 import com.batuhandemirbas.nobetcieczane.domain.model.Base
 import com.batuhandemirbas.nobetcieczane.domain.model.City
@@ -27,6 +30,10 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.gms.tasks.Task
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Call
@@ -158,6 +165,7 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
                 else -> {
                     // No location access granted.
 
+                    showDialogFilter()
                 }
             }
         }
@@ -248,8 +256,6 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
                 .commit()
         }
 
-        // TODO: filtre uygulandıktan sonra veri çekilecek
-
     }
 
     private fun getPharmacyData(latitude: Double, longitude: Double) {
@@ -296,6 +302,14 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
     private fun getCityData() {
 
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "city"
+        ).allowMainThreadQueries().build()
+
+        val cityDao = db.cityDao()
+
+
         val call = RetrofitClient.retrofitInterface().getCities(pharmacyApiKey)
 
         call.enqueue(object : Callback<Base<Array<City>>> {
@@ -310,6 +324,15 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
                     pharmacyList?.data?.let {
 
                         Constants.city.list = it
+
+
+                        if(cityDao.getDataCount() == 0) {
+
+                            for(i in it) {
+                                cityDao.insert(CityEntity(0, i.name, i.slug))
+                            }
+                        }
+
                     }
                 }
             }
