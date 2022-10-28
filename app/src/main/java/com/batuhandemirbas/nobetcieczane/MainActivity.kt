@@ -103,7 +103,6 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
                     })
 
 
-
                 }
 
             }
@@ -214,7 +213,6 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
             })
 
 
-
         }
 
         task.addOnFailureListener { exception ->
@@ -247,7 +245,12 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
             // The device is smaller, so show the fragment fullscreen
             val transaction = fragmentManager.beginTransaction()
             // For a little polish, specify a transition animation
-            transaction.setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down)
+            transaction.setCustomAnimations(
+                R.anim.slide_up,
+                R.anim.slide_down,
+                R.anim.slide_up,
+                R.anim.slide_down
+            )
             // To make it fullscreen, use the 'content' root view as the container
             // for the fragment, which is always the root view for the activity
             transaction
@@ -260,7 +263,8 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
     private fun getPharmacyData(latitude: Double, longitude: Double) {
 
-        val call = RetrofitClient.retrofitInterface().getNearestPharmacy(pharmacyApiKey,latitude, longitude)
+        val call = RetrofitClient.retrofitInterface()
+            .getNearestPharmacy(pharmacyApiKey, latitude, longitude)
 
         call.enqueue(object : Callback<Base<List<Pharmacy>>> {
             override fun onResponse(
@@ -310,51 +314,52 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
         val cityDao = db.cityDao()
 
 
-        val call = RetrofitClient.retrofitInterface().getCities(pharmacyApiKey)
 
-        call.enqueue(object : Callback<Base<Array<City>>> {
-            override fun onResponse(
-                call: Call<Base<Array<City>>>,
-                response: Response<Base<Array<City>>>
-            ) {
+            val call = RetrofitClient.retrofitInterface().getCities(pharmacyApiKey)
 
-                if (response.code() == 200) {
-                    val pharmacyList = response.body()
+            call.enqueue(object : Callback<Base<Array<City>>> {
+                override fun onResponse(
+                    call: Call<Base<Array<City>>>,
+                    response: Response<Base<Array<City>>>
+                ) {
 
-                    pharmacyList?.data?.let {
+                    if (response.code() == 200) {
+                        val pharmacyList = response.body()
 
-                        Constants.city.list = it
+                        pharmacyList?.data?.let {
 
+                            Constants.city.list = it
 
-                        if(cityDao.getDataCount() == 0) {
+                            if (cityDao.getDataCount() == 0) {
 
-                            for(i in it) {
+                            for (i in it) {
                                 cityDao.insert(CityEntity(0, i.name, i.slug))
                             }
-                        }
 
+                            }
+                        }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<Base<Array<City>>>, t: Throwable) {
-                println("-----------BEGIN---------")
-                println(" ")
-                println("URL      ->" + call.request().url())
-                println("METHOD   ->" + call.request().method())
-                println("HEADER   ->" + call.request().headers())
-                if (call.request().body() != null) {
-                    println("REQUEST  ->" + bodyToString(call.request().body()!!))
-                } else {
-                    println("REQUEST  -> null")
+                override fun onFailure(call: Call<Base<Array<City>>>, t: Throwable) {
+                    println("-----------BEGIN---------")
+                    println(" ")
+                    println("URL      ->" + call.request().url())
+                    println("METHOD   ->" + call.request().method())
+                    println("HEADER   ->" + call.request().headers())
+                    if (call.request().body() != null) {
+                        println("REQUEST  ->" + bodyToString(call.request().body()!!))
+                    } else {
+                        println("REQUEST  -> null")
+                    }
+                    println(" ")
+                    println("------------END----------")
+                    println("error")
+                    println(t.message)
                 }
-                println(" ")
-                println("------------END----------")
-                println("error")
-                println(t.message)
-            }
 
-        })
+            })
+
     }
 
     private fun getUserLocation(activity: Activity, completion: (location: Location) -> Unit) {

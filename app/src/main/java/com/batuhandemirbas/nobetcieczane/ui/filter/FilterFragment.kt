@@ -15,15 +15,12 @@ import com.batuhandemirbas.nobetcieczane.BuildConfig
 import com.batuhandemirbas.nobetcieczane.MainActivity
 import com.batuhandemirbas.nobetcieczane.R
 import com.batuhandemirbas.nobetcieczane.data.local.AppDatabase
-import com.batuhandemirbas.nobetcieczane.data.local.CityDao
 import com.batuhandemirbas.nobetcieczane.data.remote.RetrofitClient
 import com.batuhandemirbas.nobetcieczane.domain.model.Base
 import com.batuhandemirbas.nobetcieczane.domain.model.Pharmacy
 import com.batuhandemirbas.nobetcieczane.util.Constants
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.delay
 import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Call
@@ -34,8 +31,9 @@ import java.io.IOException
 class FilterFragment : DialogFragment() {
 
     private val pharmacyApiKey = BuildConfig.PHARMACY_APIKEY
-    val viewModel: FilterViewModel by viewModels()
 
+    var mainActivity: MainActivity? = null
+    val viewModel: FilterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,22 +58,22 @@ class FilterFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         println("DialogFragment onViewCreated")
 
+        val db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "database-name"
+        ).allowMainThreadQueries().build()
+
+        val cityDao = db.cityDao()
+
         val cityMenu = view.findViewById<MaterialAutoCompleteTextView>(R.id.city)
         val countyMenu = view.findViewById<MaterialAutoCompleteTextView>(R.id.county)
 
         val cityItems = viewModel.getCity()
         cityMenu?.setSimpleItems(cityItems)
 
-        val db = Room.databaseBuilder(
-            requireContext(),
-            AppDatabase::class.java, "database-name"
-        ).build()
-
-        val cityDao = db.cityDao()
-
         cityMenu.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                Snackbar.make(view, "${cityItems[position]}", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view, "${position}", Snackbar.LENGTH_SHORT).show()
                 val selectedCity= Constants.city.list?.get(position)?.slug
                 if (selectedCity != null) {
                     viewModel.getCounty(selectedCity)
@@ -110,18 +108,7 @@ class FilterFragment : DialogFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
 
-        println("DialogFragment onResume")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        println("DialogFragment onDestroy")
-    }
-
-    var mainActivity: MainActivity? = null
 
     private fun getPharmacyData(city: String, county: String) {
 
@@ -172,10 +159,6 @@ class FilterFragment : DialogFragment() {
         } catch (e: IOException) {
             "did not work"
         }
-    }
-
-    fun configure() {
-        if(viewModel.cityList.isEmpty()) return configure()
     }
 
 }

@@ -1,16 +1,15 @@
 package com.batuhandemirbas.nobetcieczane.ui.filter
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
 import com.batuhandemirbas.nobetcieczane.BuildConfig
+import com.batuhandemirbas.nobetcieczane.data.local.AppDatabase
 import com.batuhandemirbas.nobetcieczane.data.remote.RetrofitClient
 import com.batuhandemirbas.nobetcieczane.domain.model.Base
-import com.batuhandemirbas.nobetcieczane.domain.model.City
 import com.batuhandemirbas.nobetcieczane.domain.model.County
 import com.batuhandemirbas.nobetcieczane.util.Constants
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Call
@@ -18,30 +17,26 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-data class FilterUiState(
-    val lat: Double? = null,
-    val lon: Double? = null,
-)
-
-class FilterViewModel : ViewModel() {
+class FilterViewModel() : ViewModel() {
 
     private val pharmacyApiKey = BuildConfig.PHARMACY_APIKEY
 
     var countyArray: Array<County>? = null
-
     val cityList: MutableList<String> = mutableListOf()
     val countyList: MutableList<String> = mutableListOf()
     var list = MutableLiveData<List<String>>()
 
-    // Expose screen UI state
-    //private val _uiState = MutableStateFlow(FilterUiState())
-    //val uiState: StateFlow<FilterUiState> = _uiState.asStateFlow()
+
 
     // Handle business logic
 
+
     fun getCity(): Array<String> {
-        Constants.city.list?.forEach { cityList.add(it.name!!) }
-        return cityList.toTypedArray()
+        Constants.city.list?.forEach {
+            cityList.add(it.name!!)
+        }
+
+        return  cityList.toTypedArray()
     }
 
     fun getCounty(city: String) {
