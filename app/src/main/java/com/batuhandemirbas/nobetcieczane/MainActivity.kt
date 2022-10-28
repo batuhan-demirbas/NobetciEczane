@@ -10,12 +10,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.navigation.findNavController
 import androidx.room.Room
-import com.ace1ofspades.fragmentnavigation.BaseFragmentActivityBinding
-import com.batuhandemirbas.nobetcieczane.ui.filter.FilterFragment
-import com.batuhandemirbas.MainViewHolder
 import com.batuhandemirbas.nobetcieczane.data.local.AppDatabase
 import com.batuhandemirbas.nobetcieczane.data.local.CityEntity
 import com.batuhandemirbas.nobetcieczane.databinding.ActivityMainBinding
@@ -30,10 +28,6 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.gms.tasks.Task
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Call
@@ -41,28 +35,18 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
+class MainActivity : AppCompatActivity() {
 
-    val viewModel: MainViewHolder by viewModels()
-
+    private lateinit var binding: ActivityMainBinding
     private val pharmacyApiKey = BuildConfig.PHARMACY_APIKEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        val view = binding.root
+        setContentView(view)
 
         println("MAINACTIVITY onCreate")
-
-        /*
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    // Update UI elements
-                }
-            }
-        }
-         */
 
         getCityData()
 
@@ -75,8 +59,6 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
                 Constants.user.Lon = it.longitude
 
                 configure()
-
-
             }
         }
 
@@ -117,6 +99,8 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
 
 
         binding.progressBar.visibility = View.GONE
+
+        /*
         navView = binding.bottomNavigation
         tab1.fragment.startDestination = R.id.mapFragment
         tab1.fragment.graphId = R.navigation.nav_graph
@@ -127,6 +111,8 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
         tab4.fragment.startDestination = R.id.bookmarkFragment
         tab4.fragment.graphId = R.navigation.nav_graph
         containerId = R.id.fragmentContainerView
+
+         */
     }
 
     override fun onResume() {
@@ -233,31 +219,7 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
     }
 
     private fun showDialogFilter() {
-        val fragmentManager = supportFragmentManager
-        val newFragment = FilterFragment()
-
-        val isLargeLayout = resources.getBoolean(R.bool.large_layout)
-
-        if (isLargeLayout) {
-            // The device is using a large layout, so show the fragment as a dialog
-            newFragment.show(fragmentManager, "dialog")
-        } else {
-            // The device is smaller, so show the fragment fullscreen
-            val transaction = fragmentManager.beginTransaction()
-            // For a little polish, specify a transition animation
-            transaction.setCustomAnimations(
-                R.anim.slide_up,
-                R.anim.slide_down,
-                R.anim.slide_up,
-                R.anim.slide_down
-            )
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity
-            transaction
-                .add(android.R.id.content, newFragment)
-                .addToBackStack(null)
-                .commit()
-        }
+       findNavController(R.id.fragmentContainerView).navigate(R.id.action_splashFragment_to_filterFragment)
 
     }
 
@@ -407,6 +369,7 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
         Constants.pharmacy.list ?: return
 
         binding.progressBar.visibility = View.GONE
+        /*
         navView = binding.bottomNavigation
         tab1.fragment.startDestination = R.id.mapFragment
         tab1.fragment.graphId = R.navigation.nav_graph
@@ -417,6 +380,8 @@ class MainActivity : BaseFragmentActivityBinding<ActivityMainBinding>() {
         tab4.fragment.startDestination = R.id.bookmarkFragment
         tab4.fragment.graphId = R.navigation.nav_graph
         containerId = R.id.fragmentContainerView
+
+         */
     }
 
     private fun bodyToString(request: RequestBody): String {

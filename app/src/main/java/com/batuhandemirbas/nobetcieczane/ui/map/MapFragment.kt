@@ -62,7 +62,6 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         println("MAP OnViewCreated")
-
         val user = viewModel.user
 
         mapView = binding.mapview
@@ -78,6 +77,7 @@ class MapFragment : Fragment() {
                 Animation(Animation.Type.SMOOTH, 2F),
                 null
             )
+
 
         } else {
 

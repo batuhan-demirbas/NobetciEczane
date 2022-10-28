@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mapFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/mapFragment"
@@ -44,5 +44,26 @@
         android:name="com.batuhandemirbas.nobetcieczane.ui.CalenderFragment"
         android:label="fragment_calender"
         tools:layout="@layout/fragment_calender" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.batuhandemirbas.nobetcieczane.ui.filter.FilterFragment"
+        android:label="fragment_filter"
+        tools:layout="@layout/fragment_filter" >
+        <action
+            android:id="@+id/action_filterFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
 
 </navigation>
