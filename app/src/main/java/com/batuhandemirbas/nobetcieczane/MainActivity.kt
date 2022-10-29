@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        println("MAINACTIVITY onCreate")
-
         getCityData()
 
         locationPermissionRequest()
@@ -62,6 +60,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.mapItem -> {
+                    // Respond to navigation item 1 click
+                    findNavController(R.id.fragmentContainerView).popBackStack()
+                    true
+                }
+                R.id.nearestItem -> {
+                    // Respond to navigation item 2 click
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.action_mapFragment_to_nearestFragment)
+                    true
+                }
+                R.id.calenderItem -> {
+                    // Respond to navigation item 2 click
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.action_mapFragment_to_calenderFragment)
+                    true
+                }
+                R.id.bookmarkItem -> {
+                    // Respond to navigation item 2 click
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.action_mapFragment_to_bookmarkFragment)
+                    true
+                }
+                else -> false
+            }
+        }
+
+
+
 
     }
 
@@ -72,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
             when (resultCode) {
                 0 -> {
-                    showDialogFilter()
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.action_splashFragment_to_filterFragment)
 
                 }
 
@@ -92,6 +118,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+    }
+
     fun configureFilter() {
         println("ConfigureFilter Start")
         Constants.user.city ?: return
@@ -100,19 +131,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.progressBar.visibility = View.GONE
 
-        /*
-        navView = binding.bottomNavigation
-        tab1.fragment.startDestination = R.id.mapFragment
-        tab1.fragment.graphId = R.navigation.nav_graph
-        tab2.fragment.startDestination = R.id.nearestFragment
-        tab2.fragment.graphId = R.navigation.nav_graph
-        tab3.fragment.startDestination = R.id.calenderFragment
-        tab3.fragment.graphId = R.navigation.nav_graph
-        tab4.fragment.startDestination = R.id.bookmarkFragment
-        tab4.fragment.graphId = R.navigation.nav_graph
-        containerId = R.id.fragmentContainerView
-
-         */
     }
 
     override fun onResume() {
@@ -150,7 +168,7 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                     // No location access granted.
 
-                    showDialogFilter()
+                    findNavController(R.id.fragmentContainerView).navigate(R.id.action_splashFragment_to_filterFragment)
                 }
             }
         }
@@ -216,11 +234,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun showDialogFilter() {
-       findNavController(R.id.fragmentContainerView).navigate(R.id.action_splashFragment_to_filterFragment)
-
     }
 
     private fun getPharmacyData(latitude: Double, longitude: Double) {

@@ -63,7 +63,10 @@
         tools:layout="@layout/fragment_filter" >
         <action
             android:id="@+id/action_filterFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

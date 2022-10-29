@@ -32,6 +32,7 @@ class MapFragment : Fragment() {
 
     private val mapApiKey = BuildConfig.MAP_APIKEY
     private var mapView: MapView? = null
+    val flag = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +63,8 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         println("MAP OnViewCreated")
+
+
         val user = viewModel.user
 
         mapView = binding.mapview
@@ -110,13 +113,6 @@ class MapFragment : Fragment() {
         }
 
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        println("MAP onResume")
-
         mapView = binding.mapview
 
         val pharmacyList = Constants.pharmacy.list
@@ -146,6 +142,16 @@ class MapFragment : Fragment() {
 
             }
         }
+
+
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        println("MAP onResume")
+
 
     }
 
